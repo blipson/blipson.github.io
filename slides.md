@@ -54,3 +54,25 @@ fun calculateTotal(obj: Any) {
 </code></pre>
 ---
 # Live Demo
+---
+# Cons
+<ul style="margin-left: 0%">
+    <li class="fragment">Bilingualism</li>
+    <ul>
+        <li class="fragment">Syntactically  more similar than most Java libraries (Vavr, Lombok, Camel, etc...)</li>
+        <li class="fragment">Conversion Tool</li>
+    </ul>
+    <li class="fragment">Reflection</li>
+    <ul>
+        <li class="fragment">JDBI and annotations</li>
+        <li class="fragment">Workarounds</li>
+    </ul>
+    <li class="fragment">Conversion Tool Code Style</li>
+    <ul>
+        <li class="fragment">Conversion Tool Shouldn't Be Your Only Tool</li>
+    </ul>
+    <li class="fragment">Inaccurate Code Coverage Reports With Inline Functions</li>
+    <ul>
+        <li class="fragment">Code Coverage Shouldn't Be Required</li>
+    </ul>
+</ul>
