@@ -53,9 +53,10 @@ fun calculateTotal(obj: Any) {
 }
 </code></pre>
 ---
-# Live Demo
+### Live Demo
+
 ---
-# Cons
+### Cons
 <ul style="margin-left: 0%">
     <li class="fragment">Bilingualism</li>
     <ul>
