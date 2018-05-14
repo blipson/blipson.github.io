@@ -53,11 +53,10 @@ fun calculateTotal(obj: Any) {
 }
 </code></pre>
 ---
-### Live Demo
-
+# Live Demo
 ---
 ### Cons
-<ul style="margin-left: 0%">
+<ul style="margin-left: 0%; font-size: 75%;">
     <li class="fragment">Bilingualism</li>
     <ul>
         <li class="fragment">Syntactically  more similar than most Java libraries (Vavr, Lombok, Camel, etc...)</li>
