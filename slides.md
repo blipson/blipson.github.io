@@ -76,3 +76,6 @@ fun calculateTotal(obj: Any) {
         <li class="fragment">Code Coverage Shouldn't Be Required</li>
     </ul>
 </ul>
+---
+<img src="https://avatars0.githubusercontent.com/u/1446536?s=400&v=4" style="border:none; box-shadow: 0 0 0px rgba(0, 0, 0, 0);background:rgba(255, 255, 255, 0);"/>
+---
