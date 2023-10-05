@@ -1,105 +1,36 @@
 <section>
 
-<h3>Kotlin at SPS Commerce</h3>
-<p><img src="https://avatars0.githubusercontent.com/u/1446536?s=400&amp;v=4" style="border:none; box-shadow: 0 0 0px rgba(0, 0, 0, 0);background:rgba(255, 255, 255, 0);"></p>
-<h4>Ben Lipson</h4>
+<h3>Cantus Firmus Generator & Testing Random Behavior</h3>
+<h4>Ben Gangl-Lipson</h4>
 
 </section>
 <section>
 
-<h3>Intro</h3>
+<h3>Problem Statement</h3>
 <div class="fragment">
-    <img src="https://algeria20.com/wp-content/uploads/2017/11/jet.png" style="border:none; box-shadow: 0 0 0px rgba(0, 0, 0, 0);background:rgba(255, 255, 255, 0);">
     <ul>
-        <li class="fragment">Statically typed</li>
-        <li class="fragment">Type inference</li>
-        <li class="fragment">Runs on the JVM</li>
-        <li class="fragment">Interoperable with Java</li>
-        <li class="fragment">Java-compatible bytecode or ES5</li>
+        <li class="fragment">Sounds good</li>
+        <li class="fragment">No AI or Machine Learning</li>
+        <li class="fragment">Works every time</li>
     </ul>
 </div>
 
 </section>
 <section>
 
-<h3>Why?</h3>
-<ul style="margin-left: 0%">
-    <li class="fragment">Easy</li>
-    <li class="fragment">Costs nothing</li>
-    <li class="fragment">Flexible</li>
-    <li class="fragment">Popular</li>
-    <li class="fragment">Like Java, but better</li>
+<h3>The Rules</h3>
+<h4>Invented by Johann Joseph Fux in the early 18th century</h4>
+<ul>
+    <li class="fragment">Length of 8-16 notes</li>
+    <li class="fragment">All notes in the correct key</li>
+    <li class="fragment">Melodic consonances</li>
+    <li class="fragment">No repeated notes</li>
+    <li class="fragment">First and last note must be the tonic</li>
+    <li class="fragment">Final note must be approached by stepwise motion</li>
+    <li class="fragment">Leading tone always progresses to the tonic</li>
+    <li class="fragment">Total range of a 10th or less</li>
+    <li class="fragment">Large leaps followed by stepwise motion in the opposite direction</li>
+    <li class="fragment">One climax near the middle of the melody</li>
 </ul>
-
-</section>
-<section>
-
-<h3>Concise</h3>
-<pre class="fragment" style="display:inline-block; width: auto"><code data-trim="" data-noescape="">
-data class Company(val uid: Int, val name: String)
-</code></pre>
-<pre class="fragment" style="display:inline-block; width: auto"><code data-trim="" data-noescape="">
-val positiveNumbers = list.filter { it &gt; 0 }
-</code></pre>
-<pre class="fragment" style="display:inline-block; width: auto"><code data-trim="" data-noescape="">
-object ThisIsASingleton {
-    val companyName: String = "SPS Commerce"
-}
-</code></pre>
-
-</section>
-<section>
-
-<h3>Safe</h3>
-<pre class="fragment" style="display:inline-block; width: auto"><code data-trim="" data-noescape="">
-var output: String
-output = null   // Compilation error
-</code></pre>
-<pre class="fragment" style="display:inline-block; width: auto"><code data-trim="" data-noescape="">
-val name: String? = null    // Nullable type
-println(name.length())      // Compilation error
-</code></pre>
-<pre class="fragment" style="display:inline-block; width: auto"><code data-trim="" data-noescape="">
-fun calculateTotal(obj: Any) {
-    if (obj is Company) {
-        return obj.name
-    }
-}
-</code></pre>
-
-</section>
-<section>
-
-<h1>Live Demo</h1>
-
-</section>
-<section>
-
-<h3>Cons</h3>
-<ul style="margin-left: 0%; font-size: 75%;">
-    <li class="fragment">Bilingualism</li>
-    <ul>
-        <li class="fragment">Syntactically  more similar than most Java libraries (Vavr, Lombok, Camel, etc...)</li>
-        <li class="fragment">Conversion Tool</li>
-    </ul>
-    <li class="fragment">Reflection</li>
-    <ul>
-        <li class="fragment">JDBI and annotations</li>
-        <li class="fragment">Workarounds</li>
-    </ul>
-    <li class="fragment">Conversion Tool Code Style</li>
-    <ul>
-        <li class="fragment">Conversion Tool Shouldn't Be Your Only Tool</li>
-    </ul>
-    <li class="fragment">Inaccurate Code Coverage Reports With Inline Functions</li>
-    <ul>
-        <li class="fragment">Code Coverage Shouldn't Be Required</li>
-    </ul>
-</ul>
-
-</section>
-<section>
-
-<p><img src="https://avatars0.githubusercontent.com/u/1446536?s=400&amp;v=4" style="border:none; box-shadow: 0 0 0px rgba(0, 0, 0, 0);background:rgba(255, 255, 255, 0);"></p>
 
 </section>
