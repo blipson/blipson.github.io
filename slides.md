@@ -4,7 +4,7 @@
 ---
 ### Intro
 <div class="fragment">
-    <img src="https://algeria20.com/wp-content/uploads/2017/11/jet.png" style="border:none; box-shadow: 0 0 0px rgba(0, 0, 0, 0);background:rgba(255, 255, 255, 0);">
+    test
     <ul>
         <li class="fragment">Statically typed</li>
         <li class="fragment">Type inference</li>
