@@ -17,7 +17,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 <link rel="stylesheet" href="css/reveal.css">
-<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+<link rel="stylesheet" href="css/theme/serif.css" id="theme">
 
 <!-- Code syntax highlighting -->
 <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -45,13 +45,10 @@
   <!-- Any section element inside of this container is displayed as a slide -->
   <div class="slides">
       <section>
-
           <h3>Cantus Firmus Generator & Testing Random Behavior</h3>
           <h4>Ben Gangl-Lipson</h4>
-
       </section>
       <section>
-
           <h3>Problem Statement</h3>
           <div class="fragment">
               <ul>
@@ -63,7 +60,6 @@
 
       </section>
       <section>
-
           <h3>The Rules</h3>
           <h4>Invented by Johann Joseph Fux in the early 18th century</h4>
           <ul>
@@ -78,7 +74,239 @@
               <li class="fragment">Large leaps followed by stepwise motion in the opposite direction</li>
               <li class="fragment">One climax near the middle of the melody</li>
           </ul>
+      </section>
+      <section>
+          <h3>Data Modeling</h3>
+          <pre class="fragment">
+              val NOTES: List[String] = List(
+                "E",
+                "F",
+                "F#/Gb",
+                "G",
+                "G#/Ab",
+                "A",
+                "A#/Bb",
+                "B",
+                "C",
+                "C#/Db",
+                "D",
+                "D#/Eb"
+             )
+          </pre>
+      </section>
+      <section>
+          <h3>Data Modeling</h3>
+          <ul>
+              <li class="fragment">Octaves represented with a number like a piano.</li>
+              <li class="fragment">Go to the next octave when you hit C.</li>
+              <li class="fragment">Functions like a ring buffer.</li>
+          </ul>
+          <pre class="fragment">val AVAILABLE_CANTUS_FIRMUS_NOTES: List[String] =
+                    GET_ALL_NOTES_BETWEEN_TWO_NOTES("E2", "E4")</pre>
+          <pre class="fragment">[E2, F2, F#/Gb2, G2, G#/Ab2, A2, A#/Bb2, B2,
+        C3, C#/Db#3, E3, F3, F#/Gb3, G3, G#/Ab3, A3, A#/Bb3, B3
+            C4, C#/Db4, E4]</pre>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img src="c3.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img src="2ndnote.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img src="3rdnote.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img src="problem.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <p>Look Behind</p>
+          <img src="badlookbehind.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img height="500" src="fourthnote.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img height="500" src="allinvalid.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img height="500" src="allthewayback.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img height="500" src="secondinvalid.png"/>
+      </section>
+      <section>
+          <h3>Method</h3>
+          <img height="400" src="fullline.png"/>
+          <img src="fullinenotes.png">
+      </section>
+      <section>
+          <h3>Implementation</h3>
+          <pre style="font-size: 8px">
+              <code class="language-scala">
+  @tailrec
+  private def generateCantusFirmusRecursive(
+              length: Int,
+              tonic: String,
+              inMajorKeyNotes:
+              List[String],
+              cantusFirmus: List[String] = List(),
+              invalidLines: List[List[String]] = List(),
+              invalidNotePos: Int = -1
+  ): List[String] = {
+    if (cantusFirmus.length == length) {
+      cantusFirmus
+    } else {
+      generateCantusFirmusNote(length, tonic, inMajorKeyNotes, cantusFirmus, invalidLines) match {
+        case Success(nextNote) =>
+          generateCantusFirmusRecursive(
+                  length,
+                  tonic,
+                  inMajorKeyNotes,
+                  cantusFirmus :+ nextNote,
+                  invalidLines,
+                  invalidNotePos
+          )
+        case Failure(invalidNoteException) =>
+          val invalidNoteMessage = invalidNoteException.getMessage
+          if (invalidNoteMessage == "Can not generate cantus firmus.") {
+            cantusFirmus
+          } else {
+            generateCantusFirmusRecursive(
+                  length,
+                  tonic,
+                  inMajorKeyNotes,
+                  cantusFirmus.dropRight(1),
+                  invalidLines :+ invalidNoteMessage.filter(c => !"List()".contains(c)).replace(" ", "").split(",").toList,
+                  invalidNoteMessage.last.toInt
+            )
+          }
+      }
+    }
+  }
+              </code>
+          </pre>
+      </section>
+      <section>
+          <h3>Implementation</h3>
+          <pre style="font-size: 10px">
+              <code class="language-scala">
+    private def generateCantusFirmusNote(
+                  length: Int,
+                  tonic: String,
+                  inMajorKeyNotes: List[String],
+                  cantusFirmus: List[String],
+                  invalidLines: List[List[String]]
+    ): Try[String] = {
+    if (counterpointService.isFirstNote(cantusFirmus)) {
+      if (invalidLines.exists(line => line.length == 1)) {
+        Failure(new Exception("Can not generate cantus firmus."))
+      } else {
+        Success(tonic)
+      }
+    } else {
+      val universalRulesApplied = applyUniversalRules(inMajorKeyNotes, cantusFirmus, invalidLines, length)
+      val leapsRulesApplied = counterpointService.applyLeapsRules(inMajorKeyNotes, AVAILABLE_CANTUS_FIRMUS_NOTES, cantusFirmus, universalRulesApplied)
+      val individualRulesApplied = applyIndividualRules(inMajorKeyNotes, length, cantusFirmus, tonic, leapsRulesApplied)
+      val preferenceRulesApplied = applyPreferenceRules(individualRulesApplied, cantusFirmus)
+      val availableNotes = preferenceRulesApplied
 
+      if (availableNotes.isEmpty) {
+        Failure(new Exception(s"$cantusFirmus"))
+      } else {
+        Success(availableNotes(randomService.nextInt(availableNotes.length)))
+      }
+    }
+  }
+              </code>
+          </pre>
+      </section>
+      <section>
+          <h3>Implementation</h3>
+          <pre style="font-size: 12px">
+              <code class="language-scala">
+  private def isConsonance(firstNote: String, secondNote: String, availableNotes: List[String], consonances: Set[Int]) = {
+    val firstNoteIdx = availableNotes.indexOf(firstNote)
+    val secondNoteIdx = availableNotes.indexOf(secondNote)
+    firstNoteIdx != -1 && secondNoteIdx != -1 &&
+      consonances
+        .contains(math.abs(availableNotes.indexOf(firstNote) - availableNotes.indexOf(secondNote)))
+  }
+
+  def isMelodicConsonance(lastNote: String, note: String, availableNotes: List[String]): Boolean = {
+    isConsonance(lastNote, note, availableNotes, MELODIC_CONSONANCES)
+  }
+
+  private def applyUniversalRules(notes: Seq[String], cantusFirmus: List[String], invalidLines: List[List[String]], length: Int) = {
+    notes
+      .filter(note => {
+        val noteIdx = AVAILABLE_CANTUS_FIRMUS_NOTES.indexOf(note)
+        counterpointService.applyNoRepeatedNotesRule(cantusFirmus, note) &&
+          counterpointService.applyMaxRangeRule(lowestNote, highestNote, noteIdx) &&
+          !invalidLines.contains(cantusFirmus :+ note) &&
+          counterpointService.applySingleClimaxRule(note, cantusFirmus, AVAILABLE_CANTUS_FIRMUS_NOTES) &&
+          counterpointService.isMelodicConsonance(cantusFirmus.last, note, AVAILABLE_CANTUS_FIRMUS_NOTES) &&
+          counterpointService.applyMaxRepetitionRules(cantusFirmus, countsOfNotes, note, length)
+      })
+  }
+              </code>
+          </pre>
+      </section>
+      <section>
+          <h3>Testing Randomness</h3>
+          <ul>
+              <li class="fragment">Fuzzing</li>
+              <li class="fragment">Representative subsets</li>
+          </ul>
+          <pre class="fragment" style="font-size: 9px">
+              <code class="language-scala">
+  "should ensure that no note is followed by the same note" in {
+      (1 to TRIES).map(_ => {
+        val maxTonic = AVAILABLE_CANTUS_FIRMUS_NOTES.length - 7
+        val tonic = Random.between(3, maxTonic)
+        setUp(tonic, maxTonic)
+        cantusFirmusService.generate() match {
+          case Success(cantusFirmus) =>
+            cantusFirmus.zipWithIndex.map {
+              case (note, i) =>
+                if (i > 0) {
+                  if (note == cantusFirmus(i - 1)) {
+                    println("FAILURE FOUND WITH THIS CANTUS FIRMUS:")
+                    println(cantusFirmus.toString())
+                  }
+                  note must not equal cantusFirmus(i - 1)
+                }
+            }
+          case Failure(e) =>
+            e.printStackTrace()
+            fail()
+        }
+      })
+    }
+              </code>
+          </pre>
+      </section>
+      <section>
+          <h3>Live Demo</h3>
+          <a href="https://benlipson.io/projects/counterpoint">
+              https://benlipson.io/projects/counterpoint
+          </a>
+      </section>
+      <section>
+          <h3>Future Work</h3>
+          <ul>
+              <li class="fragment">First species and onwards.</li>
+              <li class="fragment">3, 4, 5 voices.</li>
+          </ul>
       </section>
   </div>
 </div>
@@ -116,6 +344,12 @@
 })();
 
 </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
+
+    <script>hljs.highlightAll();</script>
   </body>
 </html>
